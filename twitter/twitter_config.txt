@@ -1,0 +1,5 @@
+[twitter-credentials]
+consumer_key = nowHpFlj6DRAlNyL7lg7Qh43k
+consumer_secret = lsO9kOn64WhrTLnYdbwg0DXCNS3Yr0eihuLY5k8IV738hm7gic
+access_token = 1338812301810552832-lTAmP2OvXGDpkRaTFs3usubZ6MXUCA
+access_token_secret = 3STn9RQ4q6Emivd4ufq1G63NOeBL7eSA6fnthmxwKTUV3

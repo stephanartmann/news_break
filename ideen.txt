@@ -1,0 +1,50 @@
+#######################################################
+### Feature: Möglichst breites Spektrum an Artikeln ###
+#######################################################
+
+# Idee
+Zu einem gegebenen Thema sollen Artikel zurückgegeben werden, die möglichst viele verschiedene Meinungen und Informationen abdecken.
+
+# Vorgehensweisen und Stand der Arbeit
+## Artikel über Tweets Clusern
+Ähnlichkeit der Artikel wird anhand dessen, wer über sie Re/Tweeted, festgelegt. Dann wird versucht, möglichst verschiedene Artikel zurückzugeben.
+ x Artikel aus Google News holen
+ x Tweets zu Artikel holen
+ o Retweets zu Artikel holen
+ o Quotes zu Tweets holen
+ 
+## Artikel anhand von Text clustern
+ x Artikel aus Google News holen
+ x Word embedding mit k-means
+ o vernünftige Metrik definieren 
+ o Qualität des Clusterings: wie kann sie gemessen werden? Silhouette-Coefficient? within-cluster vs. in-between cluster distance? Median statt MW?
+ o einfach LDA mit Bag-of-Words
+  ausprobieren https://towardsdatascience.com/topic-modeling-and-latent-dirichlet-allocation-in-python-9bf156893c24
+
+## Synthetische / gelabelte Datensets, um Clusterinqualität zu überprüfen
+ o Twitter?
+ o selbst erzeugen?
+ 
+
+## Artikel über Tweets zusammenfassen
+ x Artikel aus Google News holen
+ x Tweets zu Artikel holen
+ o Anzahl Retweets zu Artikel holen
+ o Quotes zu Tweets holen
+ o Alogrithmus für Zusammenfassen finden
+ o Entscheidung treffen: auf Spielereviews fokussieren?
+ 
+## Artikel zusammenfassen
+ x Artikel aus Google News holen
+ o Algorithmus für unsupervised-Zusammenfassung finden
+   - Literatur: https://towardsdatascience.com/keyword-extraction-python-tf-idf-textrank-topicrank-yake-bert-7405d51cd839
+   - inshorts: https://github.com/pari08tosh/Inshorts-API
+   
+## Wichtige Passagen aus Artikel extrahieren, basierend auf Zitaten auf Twitter
+ x Artikel aus Google News holen
+ o Zitierungen in Tweets erkennen
+ o Für tweets die Anzahl an Retweets und an Quotes zählen
+
+## Artikel aus den einzelnen Clustern zusammenfassen
+ o nach Methoden dafur suchen
+
