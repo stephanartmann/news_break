@@ -17,7 +17,8 @@ from IPython.display import display
 from sklearn import metrics
 
 gf = GNews_fetcher('Resident evil 2', '24/01/2019', '12/20/2020')
-gf.fetch(10)
+page_no = 2
+gf.fetch(page_no)
 
 ########################
 ### Get Twitter data ###
@@ -35,7 +36,7 @@ dr = dim_reducer(gf.articles)
 dr.spacy_vectorization()
 
 cl = Clusterer(dr.mapped_text_vectors)
-cl.k_means(20)
+cl.k_means(min([7,len(gf.articles.Link)]))
 
 print(cl.KMeans.inertia_)
 print(metrics.silhouette_score(dr.mapped_text_vectors, cl.clusters, metric='euclidean'))
@@ -52,3 +53,27 @@ for group in cl.clusters.unique():
     for ind in gf.articles.index[cl.clusters == group]:
         print(gf.articles.loc[ind].Link,gf.articles.loc[ind].Date)
     display(wc.generate(" ".join(t for t in gf.articles.Article[cl.clusters == group])).to_image())
+    
+    
+    
+#####################################################
+### Testing clustering algorithm on Covid dataset ###
+#####################################################
+
+df = pd.read_excel('example_data/padiweb_covid19.xlsx',engine='openpyxl')
+dr = dim_reducer(df,columns=['text'])
+dr.spacy_vectorization()
+
+cl = Clusterer(dr.mapped_text_vectors)
+cl.k_means(len(df.rss_feed_content.unique()))
+
+df['clusters'] = cl.clusters
+res=df.groupby(['clusters','rss_feed_content']).aggregate({'one':'sum'}).reset_index().pivot(index='clusters',columns='rss_feed_content',values='one').fillna(0)
+res.to_excel('example_data/covid_clustering.xlsx')
+
+
+########################################
+### Test algorithm on Kaggle dataset ###
+########################################
+
+pd.read_csv('https://www.kaggle.com/kotartemiy/topic-labeled-news-dataset/download/7xUkJPKE0eRKOqPD2HOl%2Fversions%2FbKrBDOCLPC6aLobiUWMu%2Ffiles%2Flabelled_newscatcher_dataset.csv')
