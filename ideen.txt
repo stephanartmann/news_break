@@ -25,6 +25,7 @@ Zu einem gegebenen Thema sollen Artikel zurückgegeben werden, die möglichst vi
 ## Synthetische / gelabelte Datensets, um Clusterinqualität zu überprüfen
  o Twitter?
  o selbst erzeugen?
+ o Datasets auf Google Dataset suchen und Standard-Check implementieren, ob Clustering dsa Labelling wiederspiegelt
  
 
 ## Artikel über Tweets zusammenfassen
