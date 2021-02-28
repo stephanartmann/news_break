@@ -13,6 +13,7 @@ from newspaper import Config
 import pandas as pd
 import nltk
 
+
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 config = Config()
 config.browser_user_agent = user_agent
@@ -22,18 +23,19 @@ config.browser_user_agent = user_agent
 Class for Google News articles.
 '''
 
-class GNews_fetcher:
+class GNews_fetcher(TransformerMixin,BaseEstimator):
     '''
     When creating instance, specify a string of keywords, a start and an end date 
     (string of format MM/DD/YYYY). Only articles matching the keywords and with
     publication date between the start and the end date will be considered.
     '''
-    def __init__(self,keyword_string,start_date,end_date):
+    def __init__(self,keyword_string,start_date,end_date,page_no=10):
         self.articles = None
         self.start_date = start_date
         self.end_date = end_date
         self.raw_articles = None
         self.keyword_string = keyword_string
+        self.page_no = page_no
         
         self.tweeterers = {}
         self.retweeterers = {}
@@ -105,4 +107,18 @@ class GNews_fetcher:
                 else:
                     article_tweeterers[tweeter] = 1
             self.article2tweeter[link] = article_tweeterers
-                
+
+    
+    def fit(self,X=None,y=None):
+        self.fetch(self.page_no)
+        return self
+    
+    def transform(self,X=None,y=None):
+        return self.articles
+    
+    def fit_transform(self,X=None,y=None):
+        self.fit()
+        return self.transform()
+    
+
+    

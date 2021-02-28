@@ -21,6 +21,11 @@ Zu einem gegebenen Thema sollen Artikel zurückgegeben werden, die möglichst vi
  o einfach LDA mit Bag-of-Words
   ausprobieren https://towardsdatascience.com/topic-modeling-and-latent-dirichlet-allocation-in-python-9bf156893c24
  o TDA in NLP (Mail)
+ o Spacy preprocessing um ähnliche Sätze zu identifizieren (z.B. anhand von Subjek, Hauptverb, etc.)
+   https://www.analyticsvidhya.com/blog/2020/03/spacy-tutorial-learn-natural-language-processing/
+   https://spacy.io/usage/vectors-similarity
+ o Ähnliche Sätze identifizieren
+   https://medium.com/@adriensieg/text-similarities-da019229c894
 
 ## Synthetische / gelabelte Datensets, um Clusterinqualität zu überprüfen
  o Twitter?
