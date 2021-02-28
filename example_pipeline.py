@@ -21,12 +21,7 @@ from IPython.display import display
 from sklearn import metrics
 from sklearn.pipeline import make_pipeline
 
-reload_data = True
 
-if (reload_data):
-    gf = GNews_fetcher('Resident evil 2', '24/01/2019', '12/20/2020')
-    page_no = 2
-    gf.fetch(page_no)
-
-pipe=make_pipeline(DataHandler(),STembedder(),None,memory='/home/me/Downloads/del')
-res=pipe.fit_transform(gf.articles)
+pipe=make_pipeline(GNews_fetcher('Resident evil 2', '24/01/2019', '12/20/2020',
+                                 page_no = 2),DataHandler(),STembedder(),None,memory='/home/me/Downloads/del')
+res=pipe.fit_transform(None)

@@ -102,7 +102,11 @@ class STembedder(TransformerMixin,BaseEstimator):
         for column in text_data.columns:
             embeddings = pd.DataFrame(self.embedder.encode(text_data[column]))
             embeddings.columns = column+pd.Series(embeddings.columns).astype(str)
-            text_vector_df = pd.concat([text_vector_df,embeddings])
+            text_vector_df = pd.concat([text_vector_df,embeddings],axis=1)
         self.mapped_text_vectors = text_vector_df
         return [self.mapped_text_vectors,self.articles[1]]
+    
+    def fit_transform(self,articles,y=None):
+        self.fit(articles)
+        return self.transform(articles)
         

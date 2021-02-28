@@ -13,6 +13,9 @@ from newspaper import Config
 import pandas as pd
 import nltk
 
+from sklearn.base import BaseEstimator, TransformerMixin
+
+
 
 user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 config = Config()
@@ -29,13 +32,14 @@ class GNews_fetcher(TransformerMixin,BaseEstimator):
     (string of format MM/DD/YYYY). Only articles matching the keywords and with
     publication date between the start and the end date will be considered.
     '''
-    def __init__(self,keyword_string,start_date,end_date,page_no=10):
+    def __init__(self,keyword_string,start_date,end_date,page_no=10,data_set_name=None):
         self.articles = None
         self.start_date = start_date
         self.end_date = end_date
         self.raw_articles = None
         self.keyword_string = keyword_string
         self.page_no = page_no
+        self.data_set_name = data_set_name
         
         self.tweeterers = {}
         self.retweeterers = {}
