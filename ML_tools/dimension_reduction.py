@@ -8,6 +8,7 @@ Created on Tue Dec 22 16:20:44 2020
 
 import spacy
 import pandas as pd
+from umap import UMAP
 
 
 '''
@@ -52,4 +53,3 @@ class dim_reducer:
         text_vector_df.columns = self.articles.index
         self.mapped_text_vectors = text_vector_df.transpose()
             
-    

@@ -9,6 +9,7 @@ Created on Sun Feb 28 08:36:27 2021
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import Pipeline,make_pipeline
+from umap import UMAP
 
 
 '''
@@ -41,3 +42,26 @@ class DataHandler(TransformerMixin, BaseEstimator):
     def fit_transform(self,articles,y=None):
         self.fit(articles)
         return self.transform(articles)
+    
+'''
+    Wrapper Class for Transformers that do support sklearn syntax,
+    but cannot handle pass-through extra variables.
+'''
+def TransformerWrapper(TransformerMixin,BaseEstimator):
+    
+    def _initialize(self,wrapped_class,used_article_element=0,**kwargs):
+        self.wrapped_class = wrapped_class
+        self.used_article_element = used_article_element
+        
+        self.transformer = wrapped_class(**kwargs)
+    
+    def fit(self,X,y=None):
+        self.transformer.fit(X[self.used_article_element])
+        return self 
+    
+    def transform(self,X,y=None):
+        return self.transformer.transform(X)
+    
+    def fit_transform(self,X,y=None):
+        self.fit(X)
+        return self.transform(X)
