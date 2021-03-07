@@ -47,7 +47,7 @@ class DataHandler(TransformerMixin, BaseEstimator):
     Wrapper Class for Transformers that do support sklearn syntax,
     but cannot handle pass-through extra variables.
 '''
-def TransformerWrapper(TransformerMixin,BaseEstimator):
+class TransformerWrapper(TransformerMixin,BaseEstimator):
     
     def _initialize(self,wrapped_class,used_article_element=0,**kwargs):
         self.wrapped_class = wrapped_class
@@ -60,7 +60,7 @@ def TransformerWrapper(TransformerMixin,BaseEstimator):
         return self 
     
     def transform(self,X,y=None):
-        return self.transformer.transform(X)
+        return [self.transformer.transform(X[self.used_article_element]),X[1]]
     
     def fit_transform(self,X,y=None):
         self.fit(X)

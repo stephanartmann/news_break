@@ -10,6 +10,10 @@ from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
 
+from hdbscan import HDBSCAN
+
+from sklearn.base import BaseEstimator, TransformerMixin
+
 '''
 Class to perform clustering.
 '''
@@ -33,3 +37,22 @@ class Clusterer:
         self.KMeans = KMeans(n_clusters=n_clusters)
         self.clusters = pd.Series(self.KMeans.fit_predict(self.article_vectors))
         self.clusters.index = self.article_vectors.index
+        
+        
+class HDBSCAN_wrapper(TransformerMixin,BaseEstimator):
+    def __init__(self,metric='precomputed'):
+        self.clusterer=HDBSCAN(metric=metric)
+    def fit(self,X,y=None):
+        self.daten = X
+        self.clusterer.fit(X[0].astype('double'))
+        return self
+    def transform(self,X,y=None):
+        self.Erg = pd.DataFrame({
+            'label':self.clusterer.labels_,
+            'prob':self.clusterer.probabilities_})
+        return self.Erg
+        
+    def fit_transform(self,X,y=None):
+        self.fit(X)
+        return self.transform(X)
+    

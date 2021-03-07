@@ -9,6 +9,11 @@ Created on Tue Dec 22 16:20:44 2020
 import spacy
 import pandas as pd
 from umap import UMAP
+from ML_tools.pipelines import TransformerWrapper
+from sklearn.metrics.pairwise import cosine_distances
+from sklearn.base import BaseEstimator, TransformerMixin
+
+
 
 
 '''
@@ -52,4 +57,29 @@ class dim_reducer:
                             index=column + pd.Series([str(i) for i in range(0,len(mapped[0]))]))])
         text_vector_df.columns = self.articles.index
         self.mapped_text_vectors = text_vector_df.transpose()
-            
+
+class DistanceComputer(TransformerMixin,BaseEstimator):
+    def __init__(self,metric='cosine'):
+        self.metric=metric
+    
+    def fit(self,X,y=None):
+        self.X = X
+        return self
+    
+    def transform(self,X,y=None):
+        if (self.metric == 'cosine'):
+            return [cosine_distances(X[0]),X[1]]
+    
+    def fit_transform(self,X,y=None):
+        self.fit(X)
+        return self.transform(X)
+    
+         
+
+    
+class UMAP_wrapper(TransformerWrapper):
+    def __init__(self,n_components=20,min_dist=0.1,n_neighbors=15,metric='precomputed'):
+        self._initialize(UMAP,0,n_components=n_components,
+                         min_dist=min_dist,n_neighbors=n_neighbors,
+                         metric=metric)
+    
