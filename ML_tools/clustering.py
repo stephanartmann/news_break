@@ -41,12 +41,14 @@ class Clusterer:
         
 class HDBSCAN_wrapper(TransformerMixin,BaseEstimator):
     def __init__(self,metric='precomputed'):
+        self.metric=metric
         self.clusterer=HDBSCAN(metric=metric)
     def fit(self,X,y=None):
         self.daten = X
         self.clusterer.fit(X[0].astype('double'))
         return self
     def transform(self,X,y=None):
+        print('Called HDBSCAN')
         self.Erg = pd.DataFrame({
             'label':self.clusterer.labels_,
             'prob':self.clusterer.probabilities_})

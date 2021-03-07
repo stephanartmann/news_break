@@ -7,7 +7,7 @@ Created on Sun Feb 28 11:54:18 2021
 """
 
 
-from googlenews.gnews import *
+from googlenews.gnews import GNews_fetcher
 from ML_tools.dimension_reduction import dim_reducer
 from ML_tools.clustering import Clusterer
 from ML_tools.pipelines import DataHandler
@@ -25,10 +25,12 @@ from IPython.display import display
 from sklearn import metrics
 from sklearn.pipeline import make_pipeline
 
+import pandas as pd
+
 ##################################
 ### Building workflow manually ###
 ##################################
-
+'''
 gn = GNews_fetcher('Resident evil 2', '24/01/2019', '12/20/2020',
                                  page_no = 2)
 X0=gn.fit_transform(None)
@@ -45,12 +47,11 @@ plotdf.plot.scatter(0,1)
 X5=dc.fit_transform(X4)
 hdb=HDBSCAN_wrapper()
 hdb.fit_transform(X5)
-
 '''
+
 pipe=make_pipeline(GNews_fetcher('Resident evil 2', '24/01/2019', '12/20/2020',
-                                 page_no = 2),DataHandler(),STembedder(),
+                                 page_no = 20),DataHandler(),STembedder(),
                    DistanceComputer(),UMAP_wrapper(n_components=10),
-                   DistanceComputer(),HDBSCAN_wrapper(),
+                   DistanceComputer(),HDBSCAN_wrapper(),None,
                    memory='/home/me/Downloads/del')
 res=pipe.fit_transform(1)
-'''

@@ -79,6 +79,10 @@ class DistanceComputer(TransformerMixin,BaseEstimator):
     
 class UMAP_wrapper(TransformerWrapper):
     def __init__(self,n_components=20,min_dist=0.1,n_neighbors=15,metric='precomputed'):
+        self.n_components=n_components
+        self.min_dist=min_dist
+        self.n_neighbors=n_neighbors
+        self.metric=metric
         self._initialize(UMAP,0,n_components=n_components,
                          min_dist=min_dist,n_neighbors=n_neighbors,
                          metric=metric)
