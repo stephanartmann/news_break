@@ -63,7 +63,8 @@ def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimensi
     
     white_img = np.zeros([100,100,3],dtype=np.uint8)
     white_img.fill(255) 
-        
+    
+    print("Found",max(res.label),"clusters")
     imagelist=[white_img,white_img,white_img,white_img,white_img]
     for i in range(min(5,max(res.label))):
         group = res[res.label !=-1].label.value_counts().index[i]
