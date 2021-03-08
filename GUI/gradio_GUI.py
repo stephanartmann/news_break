@@ -34,7 +34,7 @@ import numpy as np
 from wordcloud import STOPWORDS
 wc = WordCloud(background_color='white', width=1000, height=400, stopwords=STOPWORDS)
 
-def main_call(keywords,starting_date,end_date,no_of_google_pages):
+def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimension):
     '''
         
     
@@ -55,7 +55,7 @@ def main_call(keywords,starting_date,end_date,no_of_google_pages):
     print('Started function')
     pipe=make_pipeline(GNews_fetcher(keywords, starting_date, end_date,
                                  page_no = no_of_google_pages),DataHandler(),STembedder(),
-                   DistanceComputer(),UMAP_wrapper(n_components=10),
+                   DistanceComputer(),UMAP_wrapper(n_components=reduced_dimension),
                    DistanceComputer(),HDBSCAN_wrapper(),None,
                    memory='/home/me/Downloads/del')
     res=pipe.fit_transform(1)
@@ -80,7 +80,7 @@ end_date = '01/01/2019'
 
 iface = gr.Interface(
   fn=main_call, 
-  inputs=["text","text","text","number"],
+  inputs=["text","text","text","number","number"],
   outputs=["image", "image", "image", "image", "image"])
 iface.launch()
 
