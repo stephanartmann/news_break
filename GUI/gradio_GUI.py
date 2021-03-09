@@ -31,10 +31,15 @@ import numpy as np
 
 
 
-from wordcloud import STOPWORDS
-wc = WordCloud(background_color='white', width=1000, height=400, stopwords=STOPWORDS)
 
-def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimension,
+
+from nltk.corpus import stopwords
+from wordcloud import WordCloud
+
+
+
+
+def main_call(keywords,starting_date,end_date,language,no_of_google_pages,reduced_dimension,
               min_cluster_size=5,min_samples=-1,
                  cluster_selection_epsilon=0.0,cluster_selection_method='eom'):
     '''
@@ -55,10 +60,17 @@ def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimensi
     
         '''
     print('Started function')
+    ST_lang = 'en'
+    if (language != 'en'):
+        ST_lang = 'multi'
     if (min_samples == -1):
         min_samples = None
+    lang2stoplang = {'de':'german','en':'english'}
+    stopset = stopwords.words(lang2stoplang[language])
+    wc = WordCloud(background_color='white', width=1000, height=400, stopwords=stopset)
     pipe=make_pipeline(GNews_fetcher(keywords, starting_date, end_date,
-                                 page_no = no_of_google_pages),DataHandler(),STembedder(),
+                                 page_no = no_of_google_pages,lang=language),
+                       DataHandler(),STembedder(language=ST_lang),
                    DistanceComputer(),UMAP_wrapper(n_components=reduced_dimension),
                    DistanceComputer(),HDBSCAN_wrapper(min_cluster_size=min_cluster_size,
                                min_samples=min_samples,
@@ -90,11 +102,12 @@ iface = gr.Interface(
   fn=main_call, 
   inputs=["text",gr.inputs.Textbox(default='01/01/2020'),
           gr.inputs.Textbox(default='01/01/2021'),
+          gr.inputs.Dropdown(['de','en']),
           gr.inputs.Number(default=20),gr.inputs.Number(default=20),
           gr.inputs.Slider(default=5),
           gr.inputs.Slider(default=-1,minimum=-1),
           gr.inputs.Slider(default=0.0,minimum=0,maximum=10,step=0.1),
-          gr.inputs.Dropdown(['leaf','eom'])],
+          gr.inputs.Dropdown(['eom','leaf'])],
   outputs=["image", "image", "image", "image", "image"])
 iface.launch(inbrowser=True)
 

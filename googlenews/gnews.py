@@ -32,7 +32,7 @@ class GNews_fetcher(TransformerMixin,BaseEstimator):
     (string of format MM/DD/YYYY). Only articles matching the keywords and with
     publication date between the start and the end date will be considered.
     '''
-    def __init__(self,keyword_string,start_date,end_date,page_no=10,data_set_name=None):
+    def __init__(self,keyword_string,start_date,end_date,page_no=10,data_set_name=None,lang='en'):
         self.articles = None
         self.start_date = start_date
         self.end_date = end_date
@@ -40,6 +40,7 @@ class GNews_fetcher(TransformerMixin,BaseEstimator):
         self.keyword_string = keyword_string
         self.page_no = page_no
         self.data_set_name = data_set_name
+        self.lang = lang
         
         self.tweeterers = {}
         self.retweeterers = {}
@@ -54,8 +55,8 @@ class GNews_fetcher(TransformerMixin,BaseEstimator):
     
     ToDo: fix datetime of articles.
     '''
-    def fetch(self,page_no = 10):
-        googlenews=GoogleNews(start=self.start_date,end=self.end_date,lang='en')
+    def fetch(self,page_no = 10,lang='en'):
+        googlenews=GoogleNews(start=self.start_date,end=self.end_date,lang=lang)
         googlenews.search(self.keyword_string)
         result=googlenews.result()
         df=pd.DataFrame(result)
@@ -114,7 +115,7 @@ class GNews_fetcher(TransformerMixin,BaseEstimator):
 
     
     def fit(self,X=None,y=None):
-        self.fetch(self.page_no)
+        self.fetch(self.page_no,lang=self.lang)
         return self
     
     def transform(self,X=None,y=None):
