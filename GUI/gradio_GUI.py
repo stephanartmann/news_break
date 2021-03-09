@@ -85,12 +85,14 @@ def main_call(keywords,starting_date,end_date,language,no_of_google_pages,reduce
     
     print("Found",max(res.label),"clusters")
     imagelist=[white_img,white_img,white_img,white_img,white_img]
+    cluster_sizes=[0,0,0,0,0]
     for i in range(min(5,max(res.label))):
         group = res[res.label !=-1].label.value_counts().index[i]
         print("Wordcloud for {}".format(group))
         print('Cluster size:',sum(res.label == group))
         imagelist[i]=wc.generate(" ".join(t for t in articles[res.label == group])).to_image()
-    return imagelist[0],imagelist[1],imagelist[2],imagelist[3],imagelist[4]
+        cluster_sizes[i]=sum(res.label == group)
+    return cluster_sizes[0],imagelist[0],cluster_sizes[1],imagelist[1],cluster_sizes[2],imagelist[2],cluster_sizes[3],imagelist[3],cluster_sizes[4],imagelist[4]
 
 '''
 keywords = 'resident evil 2'
@@ -108,6 +110,10 @@ iface = gr.Interface(
           gr.inputs.Slider(default=-1,minimum=-1),
           gr.inputs.Slider(default=0.0,minimum=0,maximum=10,step=0.1),
           gr.inputs.Dropdown(['eom','leaf'])],
-  outputs=["image", "image", "image", "image", "image"])
+  outputs=[gr.outputs.Textbox(label="Size Cluster 1"),gr.outputs.Image(label="Wordcloud Cluster 1"),
+           gr.outputs.Textbox(label="Size Cluster 2"),gr.outputs.Image(label="Wordcloud Cluster 2"),
+           gr.outputs.Textbox(label="Size Cluster 3"),gr.outputs.Image(label="Wordcloud Cluster 3"),
+           gr.outputs.Textbox(label="Size Cluster 4"),gr.outputs.Image(label="Wordcloud Cluster 4"),
+           gr.outputs.Textbox(label="Size Cluster 5"),gr.outputs.Image(label="Wordcloud Cluster 5")])
 iface.launch(inbrowser=True)
 
