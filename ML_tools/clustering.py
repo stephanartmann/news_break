@@ -40,9 +40,17 @@ class Clusterer:
         
         
 class HDBSCAN_wrapper(TransformerMixin,BaseEstimator):
-    def __init__(self,metric='precomputed'):
+    def __init__(self,metric='precomputed',min_cluster_size=5,min_samples=None,
+                 cluster_selection_epsilon=0.0,cluster_selection_method='eom'):
         self.metric=metric
-        self.clusterer=HDBSCAN(metric=metric)
+        self.min_cluster_size=min_cluster_size
+        self.min_samples = min_samples
+        self.cluster_selection_epsilon = cluster_selection_epsilon
+        self.cluster_selection_method = cluster_selection_method
+        self.clusterer=HDBSCAN(metric=metric,min_cluster_size=min_cluster_size,
+                               min_samples=min_samples,
+                               cluster_selection_epsilon=cluster_selection_epsilon,
+                               cluster_selection_method = cluster_selection_method)
     def fit(self,X,y=None):
         self.daten = X
         self.clusterer.fit(X[0].astype('double'))

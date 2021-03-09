@@ -34,7 +34,9 @@ import numpy as np
 from wordcloud import STOPWORDS
 wc = WordCloud(background_color='white', width=1000, height=400, stopwords=STOPWORDS)
 
-def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimension):
+def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimension,
+              min_cluster_size=5,min_samples=-1,
+                 cluster_selection_epsilon=0.0,cluster_selection_method='eom'):
     '''
         
     
@@ -53,10 +55,15 @@ def main_call(keywords,starting_date,end_date,no_of_google_pages,reduced_dimensi
     
         '''
     print('Started function')
+    if (min_samples == -1):
+        min_samples = None
     pipe=make_pipeline(GNews_fetcher(keywords, starting_date, end_date,
                                  page_no = no_of_google_pages),DataHandler(),STembedder(),
                    DistanceComputer(),UMAP_wrapper(n_components=reduced_dimension),
-                   DistanceComputer(),HDBSCAN_wrapper(),None,
+                   DistanceComputer(),HDBSCAN_wrapper(min_cluster_size=min_cluster_size,
+                               min_samples=min_samples,
+                               cluster_selection_epsilon=cluster_selection_epsilon,
+                               cluster_selection_method = cluster_selection_method),None,
                    memory='/home/me/Downloads/del')
     res=pipe.fit_transform(1)
     articles = pipe.named_steps['gnews_fetcher'].articles.Article
@@ -81,7 +88,13 @@ end_date = '01/01/2019'
 
 iface = gr.Interface(
   fn=main_call, 
-  inputs=["text","text","text","number","number"],
+  inputs=["text",gr.inputs.Textbox(default='01/01/2020'),
+          gr.inputs.Textbox(default='01/01/2021'),
+          gr.inputs.Number(default=20),gr.inputs.Number(default=20),
+          gr.inputs.Slider(default=5),
+          gr.inputs.Slider(default=-1,minimum=-1),
+          gr.inputs.Slider(default=0.0,minimum=0,maximum=10,step=0.1),
+          gr.inputs.Dropdown(['leaf','eom'])],
   outputs=["image", "image", "image", "image", "image"])
-iface.launch()
+iface.launch(inbrowser=True)
 
