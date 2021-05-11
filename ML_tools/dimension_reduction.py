@@ -59,8 +59,9 @@ class dim_reducer:
         self.mapped_text_vectors = text_vector_df.transpose()
 
 class DistanceComputer(TransformerMixin,BaseEstimator):
-    def __init__(self,metric='cosine'):
+    def __init__(self,metric='cosine',legacy=False):
         self.metric=metric
+        self.legacy=legacy
     
     def fit(self,X,y=None):
         self.X = X
@@ -68,7 +69,7 @@ class DistanceComputer(TransformerMixin,BaseEstimator):
     
     def transform(self,X,y=None):
         if (self.metric == 'cosine'):
-            return [cosine_distances(X[0]),X[1]]
+            return cosine_distances(X)
     
     def fit_transform(self,X,y=None):
         self.fit(X)

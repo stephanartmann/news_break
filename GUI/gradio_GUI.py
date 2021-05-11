@@ -71,7 +71,7 @@ def main_call(keywords,starting_date,end_date,language,no_of_google_pages,reduce
     pipe=make_pipeline(GNews_fetcher(keywords, starting_date, end_date,
                                  page_no = no_of_google_pages,lang=language),
                        DataHandler(),STembedder(language=ST_lang),
-                   DistanceComputer(),UMAP_wrapper(n_components=reduced_dimension),
+                   DistanceComputer(),UMAP(n_components=reduced_dimension,min_dist=0.1,n_neighbors=15,metric='precomputed'),
                    DistanceComputer(),HDBSCAN_wrapper(min_cluster_size=min_cluster_size,
                                min_samples=min_samples,
                                cluster_selection_epsilon=cluster_selection_epsilon,

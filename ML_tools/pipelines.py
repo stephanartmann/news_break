@@ -24,10 +24,11 @@ from umap import UMAP
 '''
 class DataHandler(TransformerMixin, BaseEstimator):
     def __init__(self,text_columns=['Title','Article','Summary'],
-                 nontext_columns=['Date'],source = None):
+                 nontext_columns=['Date'],source = None, return_data = 'Text'):
         self.text_columns = text_columns
         self.nontext_columns = nontext_columns
         self.source = source
+        self.return_data = return_data
         
     def fit(self,articles,y=None):
         self.X_text = articles[self.text_columns]
@@ -37,7 +38,10 @@ class DataHandler(TransformerMixin, BaseEstimator):
     
     def transform(self,articles,y=None):
         print ('DH-transform')
-        return [self.X_text,self.X_nontext]
+        if (self.return_data == 'Text'):
+            return self.X_text #[self.X_text,self.X_nontext]
+        else:
+            return self.X_nontext #[self.X_text,self.X_nontext]
     
     def fit_transform(self,articles,y=None):
         self.fit(articles)

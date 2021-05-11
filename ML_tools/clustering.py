@@ -53,7 +53,7 @@ class HDBSCAN_wrapper(TransformerMixin,BaseEstimator):
                                cluster_selection_method = cluster_selection_method)
     def fit(self,X,y=None):
         self.daten = X
-        self.clusterer.fit(X[0].astype('double'))
+        self.clusterer.fit(X.astype('double'))
         return self
     def transform(self,X,y=None):
         print('Called HDBSCAN')
